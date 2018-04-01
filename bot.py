@@ -2,6 +2,8 @@ import pyautogui, time, os, logging, sys, random, copy
 import multiprocessing as mp
 import mss
 import mss.tools
+import takeSS
+import iconPosition
 
 
 
@@ -22,8 +24,12 @@ NECESSARY_DELAY = (1/1000)
 DELAY_FOR_LOAD = (250/1000)
 
 
-GET_EXECUTION_TIME_INFO = 0
-GET_TIME_FOR_1_ATTACK = 0
+
+GRAY_VALUE = True
+
+
+GET_EXECUTION_TIME_INFO = 1
+GET_TIME_FOR_1_ATTACK = 1
 
 
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s.%(msecs)03d: %(message)s', datefmt='%H:%M:%S')
@@ -37,8 +43,9 @@ GET_TIME_FOR_1_ATTACK = 0
 # -reduce ammount of code
 
 
-#HIGH PRIORITY
-# -chenge screenShoot function. Multi-processing problem. 
+#HIGH PRIORITY:
+
+
 
 def main():
     logging.debug('Program Started. Press Ctrl-C to abort at any time.')
@@ -48,104 +55,303 @@ def main():
     sendAttack100Times()
 
     
+'''    
+
+def takeFullScreenShoot():
+    mss.mss().shot(output='images/fullscreen.png')
+     
     
+def takeSSOfARegion():
+    global aIconRegion
+    r = aIconRegion[0]
+    r1 = aIconRegion[1]
+    r2 = aIconRegion[2]
+    r3 = aIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/aRegion.png'
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+    
+    
+def takeSSOfARegion1():
+    global aIconRegion
+    r = aIconRegion[0]
+    r1 = aIconRegion[1]
+    r2 = aIconRegion[2]
+    r3 = aIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/aRegion1.png'
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)    
+    
+    
+def takeSSOfBRegion():
+    global bIconRegion
+    r = bIconRegion[0]
+    r1 = bIconRegion[1]
+    r2 = bIconRegion[2]
+    r3 = bIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/bRegion.png'
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+    
+    
+def takeSSOfBRegion1():
+    global bIconRegion
+    r = bIconRegion[0]
+    r1 = bIconRegion[1]
+    r2 = bIconRegion[2]
+    r3 = bIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/bRegion1.png'
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)    
+    
+    
+def takeSSOfResourceRegion():
+    global resourceIconRegion
+    r = resourceIconRegion[0]
+    r1 = resourceIconRegion[1]
+    r2 = resourceIconRegion[2]
+    r3 = resourceIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/resourceRegion.png'
+
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+
+
+def takeSSOfResourceRegion1():
+    global resourceIconRegion
+    r = resourceIconRegion[0]
+    r1 = resourceIconRegion[1]
+    r2 = resourceIconRegion[2]
+    r3 = resourceIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/resourceRegion1.png'
+
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)  
+    
+    
+def takeSSOfResourceRegion2():
+    global resourceIconRegion
+    r = resourceIconRegion[0]
+    r1 = resourceIconRegion[1]
+    r2 = resourceIconRegion[2]
+    r3 = resourceIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/resourceRegion2.png'
+
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+
+
+def takeSSOfResourceRegion3():
+    global resourceIconRegion
+    r = resourceIconRegion[0]
+    r1 = resourceIconRegion[1]
+    r2 = resourceIconRegion[2]
+    r3 = resourceIconRegion[3]
+    monitor = {'top': r1, 'left': r, 'width': r2, 'height': r3}
+    output = 'images/resourceRegion3.png'
+
+    # Grab the data
+    sct_img = mss.mss().grab(monitor)
+    # Save to the picture file
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=output)
+'''    
+'''    
 def aFirstLightIconPosition():
-    a1Icon = pyautogui.locateOnScreen(A_LIGHT)
+    a1Icon = pyautogui.locate(A_LIGHT, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return a1Icon
         
         
 def aFirstDarkIconPosition():
-    aIcon = pyautogui.locateOnScreen(A_DARK)
+    aIcon = pyautogui.locate(A_DARK, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return aIcon
 
 
 def bFirstLightIconPosition():
-    b1IconPosition = pyautogui.locateOnScreen(B_LIGHT)
+    b1IconPosition = pyautogui.locate(B_LIGHT, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return b1IconPosition
 
 
 def bFirstDarkIconPosition():
-    bIcon = pyautogui.locateOnScreen(B_DARK)
+    bIcon = pyautogui.locate(B_DARK, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return bIcon
 
 
 def aLightIconPosition():
-    a1Icon = pyautogui.locateOnScreen(A_LIGHT, region = aIconRegion)
-    return a1Icon
+    takeSS.ARegion(aIconRegion)
+    aIcon = pyautogui.locate(A_LIGHT, 'images/aRegion.png',
+     grayscale = GRAY_VALUE)
+    if aIcon != None:
+        aIcon = list(aIcon)
+        aIcon[0] = aIcon[0] + aIconRegion[0]
+        aIcon[1] = aIcon[1] + aIconRegion[1]
+        aIcon[2] = aIcon[2] + aIconRegion[2]
+        aIcon[3] = aIcon[3] + aIconRegion[3]
+        aIcon = tuple(aIcon)
+    return aIcon
         
         
 def aDarkIconPosition():
-    aIcon = pyautogui.locateOnScreen(A_DARK, region = aIconRegion)
+    takeSS.ARegion1(aIconRegion)
+    aIcon = pyautogui.locate(A_DARK, 'images/aRegion1.png',
+     grayscale = GRAY_VALUE)
+    if aIcon != None:
+        aIcon = list(aIcon)
+        aIcon[0] = aIcon[0] + aIconRegion[0]
+        aIcon[1] = aIcon[1] + aIconRegion[1]
+        aIcon[2] = aIcon[2] + aIconRegion[2]
+        aIcon[3] = aIcon[3] + aIconRegion[3]
+        aIcon = tuple(aIcon)
     return aIcon
 
 
 def bLightIconPosition():
-    b1IconPosition = pyautogui.locateOnScreen(B_LIGHT,
-     region = bIconRegion)
-    return b1IconPosition
+    takeSS.BRegion(bIconRegion)
+    bIcon = pyautogui.locate(B_LIGHT, 'images/bRegion.png',
+     grayscale = GRAY_VALUE)
+    if bIcon != None:
+        bIcon = list(bIcon)
+        bIcon[0] = bIcon[0] + bIconRegion[0]
+        bIcon[1] = bIcon[1] + bIconRegion[1]
+        bIcon[2] = bIcon[2] + bIconRegion[2]
+        bIcon[3] = bIcon[3] + bIconRegion[3]
+        bIcon = tuple(bIcon)
+    return bIcon
 
 
 def bDarkIconPosition():
-    bIcon = pyautogui.locateOnScreen(B_DARK, region = bIconRegion)
+    takeSS.BRegion1(bIconRegion)
+    bIcon = pyautogui.locate(B_DARK, 'images/bRegion1.png',
+     grayscale = GRAY_VALUE)
+    if bIcon != None:
+        bIcon = list(bIcon)
+        bIcon[0] = bIcon[0] + bIconRegion[0]
+        bIcon[1] = bIcon[1] + bIconRegion[1]
+        bIcon[2] = bIcon[2] + bIconRegion[2]
+        bIcon[3] = bIcon[3] + bIconRegion[3]
+    bIcon = tuple(bIcon)
     return bIcon
 
     
 def afIconPosition():
-    afIcon = pyautogui.locateOnScreen(AF_ICON)
+    takeSS.FullScreen()
+    afIcon = pyautogui.locate(AF_ICON, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return afIcon
     
     
 def JSIconPosition():
-    JSIcon = pyautogui.locateOnScreen(JS_ICON)
+    JSIcon = pyautogui.locate(JS_ICON, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return JSIcon
     
 
 def blankDarkResourcesIconPosition():
-    blankDarkIcon = pyautogui.locateOnScreen(BLANK_DARK,
-     region = resourceIconRegion)
-    return blankDarkIcon
+    takeSS.ResourceRegion(resourceIconRegion)
+    resourceIcon = pyautogui.locate(BLANK_DARK, 'images/resourceRegion.png',
+     grayscale = GRAY_VALUE)
+    if resourceIcon != None:
+        resourceIcon = list(resourceIcon)
+        resourceIcon[0] = resourceIcon[0] + resourceIconRegion[0]
+        resourceIcon[1] = resourceIcon[1] + resourceIconRegion[1]
+        resourceIcon[2] = resourceIcon[2] + resourceIconRegion[2]
+        resourceIcon[3] = resourceIcon[3] + resourceIconRegion[3]
+        resourceIcon = tuple(resourceIcon)
+    return resourceIcon
 
 
 def blankLightResourcesIconPosition():
-    blankLightIcon = pyautogui.locateOnScreen(BLANK_LIGHT,
-     region = resourceIconRegion)
-    return blankLightIcon
+    takeSS.ResourceRegion1(resourceIconRegion)
+    resourceIcon = pyautogui.locate(BLANK_LIGHT, 'images/resourceRegion1.png',
+     grayscale = GRAY_VALUE)
+    if resourceIcon != None:
+        resourceIcon = list(resourceIcon)
+        resourceIcon[0] = resourceIcon[0] + resourceIconRegion[0]
+        resourceIcon[1] = resourceIcon[1] + resourceIconRegion[1]
+        resourceIcon[2] = resourceIcon[2] + resourceIconRegion[2]
+        resourceIcon[3] = resourceIcon[3] + resourceIconRegion[3]
+        resourceIcon = tuple(resourceIcon)
+    return resourceIcon
     
     
 def fullDarkResourcesIconPosition():
-    fullDarkIcon = pyautogui.locateOnScreen(FULL_DARK,
-     region = resourceIconRegion)
-    return fullDarkIcon    
+    takeSS.ResourceRegion2(resourceIconRegion)
+    resourceIcon = pyautogui.locate(FULL_DARK, 'images/resourceRegion2.png',
+     grayscale = GRAY_VALUE)
+    if resourceIcon != None:
+        resourceIcon = list(resourceIcon)
+        resourceIcon[0] = resourceIcon[0] + resourceIconRegion[0]
+        resourceIcon[1] = resourceIcon[1] + resourceIconRegion[1]
+        resourceIcon[2] = resourceIcon[2] + resourceIconRegion[2]
+        resourceIcon[3] = resourceIcon[3] + resourceIconRegion[3]
+        resourceIcon = tuple(resourceIcon)
+    return resourceIcon    
     
     
 def fullLightResourcesIconPosition():
-    fullLightIcon = pyautogui.locateOnScreen(FULL_LIGHT,
-     region = resourceIconRegion)
-    return fullLightIcon
+    takeSS.ResourceRegion3(resourceIconRegion)
+    resourceIcon = pyautogui.locate(FULL_LIGHT, 'images/resourceRegion3.png',
+     grayscale = GRAY_VALUE)
+    if resourceIcon != None:
+        resourceIcon = list(resourceIcon)
+        resourceIcon[0] = resourceIcon[0] + resourceIconRegion[0]
+        resourceIcon[1] = resourceIcon[1] + resourceIconRegion[1]
+        resourceIcon[2] = resourceIcon[2] + resourceIconRegion[2]
+        resourceIcon[3] = resourceIcon[3] + resourceIconRegion[3]
+        resourceIcon = tuple(resourceIcon)
+    return resourceIcon
 
 
 def blankFirstDarkResourcesIconPosition():
-    blankDarkIcon = pyautogui.locateOnScreen(BLANK_DARK)
+    blankDarkIcon = pyautogui.locate(BLANK_DARK, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return blankDarkIcon
 
 
 def blankFirstLightResourcesIconPosition():
-    blankLightIcon = pyautogui.locateOnScreen(BLANK_LIGHT)
+    blankLightIcon = pyautogui.locate(BLANK_LIGHT, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return blankLightIcon
     
     
 def fullFirstDarkResourcesIconPosition():
-    fullDarkIcon = pyautogui.locateOnScreen(FULL_DARK)
+    fullDarkIcon = pyautogui.locate(FULL_DARK, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return fullDarkIcon    
     
     
 def fullFirstLightResourcesIconPosition():
-    fullLightIcon = pyautogui.locateOnScreen(FULL_LIGHT)
+    fullLightIcon = pyautogui.locate(FULL_LIGHT, 'images/fullscreen.png',
+     grayscale = GRAY_VALUE)
     return fullLightIcon
-    
+'''    
     
 def mouseMovementToBDark():
-    bPosition = bDarkIconPosition()
+    bPosition = iconPosition.bDark(bIconRegion)
     changeInMovementX = random.randint(0,11)
     changeInMovementY = random.randint(0,11)
     pyautogui.moveTo(bPosition[0] + 15,
@@ -154,7 +360,7 @@ def mouseMovementToBDark():
      
 
 def mouseMovementToBLight():
-    bPosition = bLightIconPosition()
+    bPosition = iconPosition.bLight(bIconRegion)
     changeInMovementX = random.randint(0,11)
     changeInMovementY = random.randint(0,11)
     pyautogui.moveTo(bPosition[0] + 15,
@@ -163,7 +369,7 @@ def mouseMovementToBLight():
      
      
 def mouseMovementToADark():
-    aPosition = aDarkIconPosition()
+    aPosition = iconPosition.aDark(aIconRegion)
     changeInMovementX = random.randint(0,11)
     changeInMovementY = random.randint(0,11)
     pyautogui.moveTo(aPosition[0] + 15,
@@ -172,7 +378,7 @@ def mouseMovementToADark():
      
      
 def mouseMovementToALight():
-    aPosition = aLightIconPosition()
+    aPosition = iconPosition.aLight(aIconRegion)
     changeInMovementX = random.randint(0,11)
     changeInMovementY = random.randint(0,11)
     pyautogui.moveTo(aPosition[0] + 15,
@@ -181,7 +387,7 @@ def mouseMovementToALight():
     
     
 def mouseMovementToAF():
-    afPosition = afIconPosition()
+    afPosition = iconPosition.af()
     changeInMovementX = random.randint(0,3)
     changeInMovementY = random.randint(0,3)
     pyautogui.moveTo(afPosition[0] + changeInMovementX,
@@ -190,7 +396,7 @@ def mouseMovementToAF():
      
      
 def mouseMovementToJS():
-    JSPosition = JSIconPosition()
+    JSPosition = iconPosition.JS()
     changeInMovementX = random.randint(0,3)
     changeInMovementY = random.randint(0,3)
     pyautogui.moveTo(JSPosition[0] + 5 + changeInMovementX,
@@ -284,13 +490,13 @@ def sendAttack100Times():
  
 def dispatcherForCheckResources(n):
     if n == 0:
-        return blankLightResourcesIconPosition()
+        return iconPosition.blankLightResources(resourceIconRegion)
     if n == 1:
-        return blankDarkResourcesIconPosition()
+        return iconPosition.blankDarkResources(resourceIconRegion)
     if n == 2:
-        return fullLightResourcesIconPosition()
+        return iconPosition.fullLightResources(resourceIconRegion)
     if n == 3:
-        return fullDarkResourcesIconPosition()
+        return iconPosition.fullDarkResources(resourceIconRegion)
                             
     
 '''Resources 0-fullLight, 1-fullDark, 2-blankLight, 3-blankDark''' 
@@ -380,7 +586,7 @@ def checkResources():
 def getRegionOfAFImages():
     if GET_EXECUTION_TIME_INFO == 1:
         start = time.time()
-    
+    takeSS.FullScreen()
     getRegionOfAImage()
     getRegionOfBImage()
     getRegionOfResourceImage()
@@ -391,9 +597,9 @@ def getRegionOfAFImages():
 
 def dispatcherForAFirstRegion(n):
     if n == 0:
-        return aFirstLightIconPosition()
+        return iconPosition.aFirstLight()
     if n == 1:
-        return aFirstDarkIconPosition()
+        return iconPosition.aFirstDark()
     
     
  
@@ -402,7 +608,7 @@ def getRegionOfAImage():
     
     if GET_EXECUTION_TIME_INFO == 1:
         start = time.time()
-    
+    takeSS.FullScreen()
     pool = mp.Pool(processes=2)
     v = pool.map(dispatcherForAFirstRegion, range(2))
     #bLightTemp = bFirstLightIconPosition()
@@ -441,9 +647,9 @@ def getRegionOfAImage():
 
 def dispatcherForBFirstRegion(n):
     if n == 0:
-        return bFirstLightIconPosition()
+        return iconPosition.bFirstLight()
     if n == 1:
-        return bFirstDarkIconPosition()
+        return iconPosition.bFirstDark()
     
        
    
@@ -452,7 +658,7 @@ def getRegionOfBImage():
     
     if GET_EXECUTION_TIME_INFO == 1:
         start = time.time()
-    
+    takeSS.FullScreen()
     pool = mp.Pool(processes=2)
     v = pool.map(dispatcherForBFirstRegion, range(2))
     pool.close()
@@ -466,7 +672,7 @@ def getRegionOfBImage():
     bMinimum = min(bLightTemp[1], bDarkTemp[1])
         
     if(bMinimum == bLightTemp[1]):
-        bLighteTemp = list(bLightTemp)
+        bLightTemp = list(bLightTemp)
         bLightTemp[0] -= IMAGE_SAFE_BUFFOR
         bLightTemp[1] -= IMAGE_SAFE_BUFFOR
         bLightTemp[2] += IMAGE_SAFE_BUFFOR*2
@@ -491,13 +697,13 @@ def getRegionOfBImage():
 
 def dispatcherForResourceFirstRegion(n):
     if n == 0:
-        return blankFirstLightResourcesIconPosition()
+        return iconPosition.blankFirstLightResources()
     if n == 1:
-        return blankFirstDarkResourcesIconPosition()
+        return iconPosition.blankFirstDarkResources()
     if n == 2:
-        return fullFirstLightResourcesIconPosition()
+        return iconPosition.fullFirstLightResources()
     if n == 3:
-        return fullFirstDarkResourcesIconPosition()
+        return iconPosition.fullFirstDarkResources()
 
         
 def getRegionOfResourceImage():
@@ -506,7 +712,7 @@ def getRegionOfResourceImage():
     
     if GET_EXECUTION_TIME_INFO == 1:
         start = time.time()
-
+    takeSS.FullScreen()
     pool = mp.Pool(processes=4)
     v = pool.map(dispatcherForResourceFirstRegion, range(4))
     pool.close()
